@@ -82,3 +82,16 @@ test('private decision notes copy with real line breaks',async()=>{
 test('assessment retains privacy-by-default without storage or network calls',()=>{
   assert.doesNotMatch(script,/\bfetch\s*\(|XMLHttpRequest|localStorage|sessionStorage/);
 });
+
+test('portrait shows all twelve answer-level evidence items without pretending to observe behavior',()=>{
+  const h=harness();
+  h.node('start').onclick();
+  for(let i=0;i<12;i++)h.node('options').children[0].onclick();
+  const evidence=h.node('evidence').children;
+  assert.equal(evidence.length,15); // three domain headings and twelve answers
+  const statements=evidence.filter(x=>/You chose:/.test(x.textContent));
+  assert.equal(statements.length,12);
+  assert.ok(statements.every(x=>x.textContent.includes(' — You chose: ')));
+  assert.match(html,/Challenge your portrait/);
+  assert.match(html,/do not measure ability/);
+});
