@@ -1,0 +1,15 @@
+name: Test v0.4 user journey
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  journey:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run user journey regression tests
+        run: node --test tests/journey.test.cjs
